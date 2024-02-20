@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "941737921150",
+    "firebase_url": "https://fir-authentication-84fda-default-rtdb.firebaseio.com",
+    "project_id": "fir-authentication-84fda",
+    "storage_bucket": "fir-authentication-84fda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941737921150:android:4de165793f74e3adc7662f",
+        "android_client_info": {
+          "package_name": "com.example.space_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGCgw0olQz2NEm_4AYC9_Upi9cEV91wCg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
