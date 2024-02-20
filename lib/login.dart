@@ -1,10 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:space_app/main.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -14,98 +17,66 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Uygulama logosu
-                Image.asset('assets/logo.png'),
-                SizedBox(height: 20.0),
-                // E-posta metin girişi
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'E-posta Adresi',
-                  ),
-                ),
-                SizedBox(height: 10.0),
-                // Şifre metin girişi
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Şifre',
-                  ),
-                ),
-                SizedBox(height: 20.0),
-                // Giriş butonu
-                ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(
-                        email: _emailController.text,
-                        password: _passwordController.text,
-                      );
-                      // Giriş başarılıysa ana sayfaya yönlendir
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyHomePage()),
-                      );
-                    } on FirebaseAuthException catch (e) {
-                      _showErrorDialog(context, e.code);
-                    }
-                  },
-                  child: Text('Giriş Yap'),
-                ),
-                SizedBox(height: 10.0),
-                // Kayıt ol bağlantısı
-                TextButton(
-                  onPressed: () {
-                    // Kayıt sayfasına yönlendir
-                  },
-                  child: Text('Kayıt Ol'),
-                ),
-              ],
+      body: Stack(
+        children: [
+          Positioned(
+            child: Center(
+              child: SvgPicture.asset(
+                'assets/loginpage_background.svg',
+              ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  void _showErrorDialog(BuildContext context, String errorCode) {
-    String errorMessage;
-
-    switch (errorCode) {
-      case 'user-not-found':
-        errorMessage = 'Kullanıcı bulunamadı.';
-        break;
-      case 'wrong-password':
-        errorMessage = 'Hatalı şifre.';
-        break;
-      default:
-        errorMessage = 'Bir hata oluştu.';
-    }
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Hata'),
-          content: Text(errorMessage),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Tamam'),
+          Center(
+            child: Card(
+              elevation: 10,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      'assets/logo.png',
+                      height: 75,
+                    ),
+                    TextField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(labelText: 'Email'),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(labelText: 'Şifre'),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          );
+                          Navigator.push(
+                            BuildContext as BuildContext,
+                            MaterialPageRoute(
+                                builder: (context) => const MyHomePage()),
+                          );
+                        } on FirebaseAuthException catch (e) {
+                          ScaffoldMessenger.of(BuildContext as BuildContext).showSnackBar(
+                            SnackBar(content: Text(e.message!)),
+                          );
+                        }
+                      },
+                      child: const Text('Giriş Yap'),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
     );
   }
 }
